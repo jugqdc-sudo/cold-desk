@@ -49,16 +49,16 @@ DAYS = [
      f"<code>desk.py run</code> on 72 minutes: <b>{s['utterances']:,}</b> utterances cut, "
      f"<b>{s['phones']:,}</b> phones heard, <b>{s['words_saved']:,}</b> word candidates, "
      f"<b>{s['rules_written']}</b> rules written and <b>{s['rules_signed']}</b> signed",
-     "done", "index.html"),
+     "done", "report.html"),
     (2, "contradictions are kept as variants instead of being resolved",
      f"<b>{s['fights_open']}</b> fights stay open in the run - pairs one phone apart where both "
      f"forms keep coming back. Nothing picks a winner, because nobody alive can",
-     "done", "index.html#fights"),
+     "done", "report.html#fights"),
     (3, "rules turn out to be him doing somebody else's voice",
      f"every rule carries <code>in_shifted_voice</code>. On this tape <b>{shifted_rules} of the "
      f"{s['rules_signed']} signed rules</b> live where his pitch or tempo is 2σ off his own median, "
      f"and <b>{s['register_shifts']}</b> register shifts are logged with positions",
-     "done", "index.html#voice"),
+     "done", "report.html#voice"),
     (4, "the desk speaks the language back to him",
      "sentence assembly is not written. Cloning a voice off 45 hours of one speaker is a solved "
      "problem; a native speaker's reaction to it is not, and that is the half that matters",
@@ -76,18 +76,18 @@ DAYS = [
      f"forms this grammar allows · <b>{dv.get('on_tape',0)}</b> turned out to be on the tape after "
      f"all · <b>{s.get('derived_never_recorded',0):,}</b> are on no second of it. Control: "
      f"<b>{base.get('hits','-')} of {base.get('n',0):,}</b> random chains of the same lengths land anywhere",
-     "done", "index.html#derived"),
+     "done", "report.html#derived"),
     (8, "the queue is sorted by which words are safe to lose",
      f"<code>derive.queue()</code> - <b>{qu.get('unrecoverable',0):,} of {qu.get('total',0):,}</b> word "
      f"candidates were heard twice or less and no signed rule rebuilds them. That is the order to "
      f"work through with a speaker, not the frequency list",
-     "done", "index.html#queue"),
+     "done", "report.html#queue"),
     (8, "his voice has fewer minutes left than the queue has words",
      "a budget across months needs sessions across months, and there is one sitting. The honest half "
      "is here: fade measured inside a tape, 10-minute windows. Torwali stays flat to the end; "
      f"Piedmontese loses <b>{abs(fade_p):.1f}%</b> of utterance length per window" if fade_p is not None
      else "fade is measured in 10-minute windows inside each tape",
-     "partly", "index.html#fade"),
+     "partly", "report.html#fade"),
 ]
 
 BADGE = {"done": ("mint", "RAN ON REAL TAPE"), "partly": ("amber", "HALF OF IT RUNS"),
@@ -140,11 +140,11 @@ code{{background:#eceae2;padding:1px 5px;font-size:12px}}
 @media(max-width:760px){{.day{{grid-template-columns:1fr;gap:8px}}.dbadge{{text-align:left;padding-top:0}}h1{{font-size:32px}}}}
 </style></head><body><div class="wrap">
 
-<div class="top"><b>GROK LANGUAGE MODEL</b>
+<div class="top"><b><a href="index.html" style="color:inherit;text-decoration:none">GROK LANGUAGE MODEL</a></b>
 <span class="pill">CASE 01 · THE LAST SPEAKER</span>
 <span class="pill mint">{counts['done']} DAYS RUN ON REAL TAPE</span>
 <span class="pill red">{counts['needs a human']} NEED A LIVING SPEAKER</span>
-<span style="margin-left:auto"><a href="index.html">torwali</a> · <a href="piedmontese.html">piedmontese</a></span></div>
+<span style="margin-left:auto"><a href="report.html">torwali</a> · <a href="piedmontese.html">piedmontese</a></span></div>
 
 <h1>the serial against the code</h1>
 <div class="sub">the speaker in the story is invented. the tape is not, the numbers are not, and this

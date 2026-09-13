@@ -1,0 +1,425 @@
+<meta charset="utf-8">
+<title>GROK BOT · LIVE TERMINAL · ON CHAIN</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>  :root{
+    --paper:#eceee9; --panel:#f6f7f4; --line:#c9cec6; --line2:#dfe3dc;
+    --ink:#22261f; --dim:#7b8378; --faint:#a8b0a3;
+    --mint:#57a07a; --amber:#c8913a; --red:#c04a3c; --tape:#8d7b5f; --her:#8a6fa8;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#eceee9;overflow:hidden}
+  #stage{position:relative;width:1280px;height:720px;background:var(--paper);
+    font-family:var(--mono);font-size:9px;color:var(--ink);overflow:hidden}
+  canvas{position:absolute;left:0;top:0;width:1280px;height:720px}
+  #top{position:absolute;top:0;left:0;right:0;height:26px;display:flex;
+    align-items:center;gap:10px;padding:0 10px;background:#e2e5df;
+    border-bottom:1px solid var(--line)}
+  .tab{font-weight:700;letter-spacing:1.4px;font-size:9px;white-space:nowrap}
+  .pill{padding:3px 8px;border-radius:2px;font-size:8px;letter-spacing:1.2px;font-weight:700;white-space:nowrap}
+  .pill.dark{background:#2b302a;color:#eceee9}
+  .pill.red{background:#f0dcd8;color:var(--red)}
+  .pill.mint{background:#d9ecdf;color:#2f6b4a}
+  .pill.her{background:#e6dff0;color:#5e4a7d}
+  .pill.line{border:1px solid var(--line);background:#fff}
+  #tstat{margin-left:auto;font-size:8px;letter-spacing:1.4px;color:var(--dim)}
+  #tstat b{color:var(--ink);font-weight:700}
+  #brief{position:absolute;left:0;right:242px;top:26px;height:32px;
+    padding:9px 14px 0;background:#dfe4dc;border-bottom:1px solid var(--line);
+    font-size:10.5px;letter-spacing:.2px;color:#3d4438;white-space:nowrap;overflow:hidden}
+  #brief b{color:var(--ink);font-weight:700}
+  #brief .warn{color:var(--red);font-weight:700}
+  #brief .her{color:var(--her);font-weight:700}
+  .card{position:absolute;background:var(--panel);border:1px solid var(--line);padding:6px 8px}
+  .card h4{margin:0 0 5px;font-size:7.5px;letter-spacing:1.8px;color:var(--dim);
+    font-weight:400;text-transform:uppercase}
+  .kv{display:flex;justify-content:space-between;line-height:1.75;font-size:8.5px}
+  .kv .v{color:var(--dim)}
+  .kv .tag{font-size:7.5px;letter-spacing:1px}
+  .tag.ok{color:var(--mint)} .tag.warn{color:var(--amber)} .tag.bad{color:var(--red)} .tag.her{color:var(--her)}
+  #strip{position:absolute;left:0;right:0;top:228px;height:22px;display:flex;
+    align-items:center;gap:0;background:#e7eae4;border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);font-size:8px;letter-spacing:1.1px}
+  #strip div{padding:0 11px;border-right:1px solid var(--line2);color:var(--dim);white-space:nowrap}
+  #strip b{color:var(--ink);font-weight:700;margin-left:5px}
+  #strip i{font-style:normal;font-size:7.5px;margin-left:3px}
+  .up{color:var(--mint)} .down{color:var(--red)}
+  .agent{position:absolute;width:158px;background:var(--panel);border:1px solid var(--line);padding:6px 7px}
+  .agent .nm{font-weight:700;font-size:8.5px;letter-spacing:1.3px;display:flex;align-items:center;gap:5px}
+  .agent .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+  .agent .own{color:var(--dim);font-size:8px;line-height:1.5;margin-top:4px}
+  .agent .stop{background:#f7e7e4;border-top:1px solid #e8cdc7;margin:5px -7px -6px;
+    padding:4px 7px;font-size:8px;color:var(--red);line-height:1.4}
+  .agent .stop b{color:#7d3a30;font-weight:400}
+  .agent .vote{background:#e4ece6;border-top:1px solid #cfe0d5;margin:5px -7px -6px;
+    padding:4px 7px;font-size:8px;color:#2f6b4a;line-height:1.4;letter-spacing:1.2px;font-weight:700}
+  .sig{float:right;font-size:7px;letter-spacing:1px;color:var(--mint)}
+  #right{position:absolute;right:0;top:26px;bottom:0;width:242px;background:var(--panel);
+    border-left:1px solid var(--line);padding:8px 9px;overflow:hidden}
+  .rh{font-size:7.5px;letter-spacing:1.8px;color:var(--dim);text-transform:uppercase;
+    margin:8px 0 4px;display:flex;justify-content:space-between}
+  .rh:first-child{margin-top:0}
+  .chief{display:flex;gap:7px;align-items:flex-start;padding-bottom:7px;border-bottom:1px solid var(--line2)}
+  .chief .av{width:22px;height:22px;background:#2b302a;color:#eceee9;display:flex;
+    align-items:center;justify-content:center;font-size:9px;font-weight:700}
+  .chief .t{font-size:8px;line-height:1.5;color:var(--dim)}
+  .chief .t b{display:block;color:var(--ink);font-size:9px;letter-spacing:1.2px}
+  .arow{display:flex;align-items:center;gap:6px;line-height:1.8;font-size:8.5px}
+  .arow .sq{width:7px;height:7px;display:inline-block}
+  .arow .sub{color:var(--faint);font-size:7.5px}
+  .arow .n{margin-left:auto;font-weight:700}
+  .n.plus{color:var(--mint)} .n.minus{color:var(--red)}
+  #log div{font-size:8px;line-height:1.7;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #log div b{color:var(--ink);font-weight:400}
+  #log div.red{color:var(--red)} #log div.grn{color:#2f6b4a} #log div.her{color:var(--her)}
+  #queue div{font-size:8px;line-height:1.6;color:var(--dim);display:flex;justify-content:space-between}
+  #queue div b{color:var(--ink);font-weight:400}
+  #queue div.back{color:#2f6b4a;font-weight:700}
+  .gate{display:flex;justify-content:space-between;font-size:8px;line-height:1.8;color:var(--dim)}
+  .gate .bar{width:70px;height:7px;background:#e0e4dd;position:relative}
+  .gate .bar i{position:absolute;inset:0 auto 0 0;background:#8f9a8a}
+  .gate .bar.r i{background:var(--red)} .gate .bar.g i{background:var(--mint)}
+  #score{margin-top:7px;padding-top:7px;border-top:1px solid var(--line2)}
+  #score .big{font-size:22px;font-weight:700;letter-spacing:-.5px}
+  #score .sub{font-size:7.5px;color:var(--faint);letter-spacing:1px}
+</style>
+<style>
+  .pill.live{background:#1f3a2b;color:#8fe0b0}
+  .blink{animation:none}
+  #chain{position:absolute;right:0;top:26px;bottom:0;width:242px;background:#2b302a;color:#eceee9;
+    border-left:1px solid #1c1f1a;padding:8px 9px;overflow:hidden;font-size:8px}
+  #chain .rh{color:#8f9a8a}
+  #chain .big{font-size:22px;font-weight:700;letter-spacing:-.5px;color:#8fe0b0}
+  #chain .kv{color:#c9cec6}
+  #chain .kv b{color:#eceee9;font-weight:700}
+  #tx div{font-size:8px;line-height:1.7;color:#a8b0a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tx div b{color:#8fe0b0;font-weight:400}
+  #tx div.f{color:#c8913a}
+  .bar2{height:6px;background:#3a403a;position:relative;margin:4px 0 8px}
+  .bar2 i{position:absolute;inset:0 auto 0 0;background:#8fe0b0}
+  .bar2.a i{background:#c8913a}
+  .agent .now{margin-top:4px;font-size:8px;color:var(--ink);line-height:1.4;min-height:22px}
+  .agent .now i{font-style:normal;color:var(--mint)}
+</style>
+
+<div id="stage">
+  <canvas id="cv" width="2560" height="1440"></canvas>
+
+  <div id="top">
+    <span class="tab">GROK LANGUAGE MODEL</span>
+    <span class="tab" style="color:var(--mint)">CASE 01 · THE LAST SPEAKER · DAY 12</span>
+    <span class="pill red">● SPEAKER ELIAS · 86</span>
+    <span class="pill live" id="plive">● LIVE</span>
+    <span class="pill line" id="pvar">GATE · SHUT · 61 H</span>
+    <span class="pill dark">TAPE @ventry089</span>
+    <span id="tstat">SAVED <b id="tsaved">5,367</b> · NEVER RECORDED <b>1,120</b> · SPEAKERS <b>3</b> · CREW <b>6</b> &nbsp; <b id="clk">00:07:00 UTC</b></span>
+  </div>
+
+  <div id="brief">
+<b>LIVE · THE DESK, RIGHT NOW</b> · six agents on 212 hours of one man &nbsp;·&nbsp; <span class="warn" id="bwarn">the gate is shut on 61 hours of her. a token does not open it</span>
+  </div>
+
+  <div class="card" style="left:10px;top:66px;width:210px">
+    <h4>the archive</h4>
+    <div class="kv"><span>tape</span><span class="v">212 hours</span><span class="tag ok">LOADED</span></div>
+    <div class="kv"><span>him speaking</span><span class="v">45 hours</span><span class="tag ok">CUT</span></div>
+    <div class="kv"><span>her · left channel</span><span class="v">61 hours</span><span class="tag bad">SHUT</span></div>
+    <div class="kv"><span>reel now</span><span class="v" id="kvReel">—</span><span class="tag her" id="kvReelT">PLAYING</span></div>
+  </div>
+
+  <div class="card" style="left:228px;top:66px;width:246px">
+    <h4>what is on the microphone · live</h4>
+    <div id="spec" style="height:96px"></div>
+    <div class="kv" style="margin-top:3px"><span class="v" style="font-size:7.5px" id="specq">"sallun"</span></div>
+  </div>
+
+  <div class="card" style="left:482px;top:66px;width:216px">
+    <h4>day 12 · on chain</h4>
+    <div id="vl" style="height:112px"></div>
+  </div>
+
+  <div class="card" style="left:706px;top:66px;width:150px">
+    <h4 id="reelh">reel · live</h4>
+    <div id="reel" style="height:112px"></div>
+  </div>
+
+  <div id="strip">
+    <div>WORDS SAVED<b id="sSaved">5,367</b><i class="up" id="sSavedD">+0</i></div>
+    <div>NEVER RECORDED<b>1,120</b></div>
+    <div>ON THE WALL TODAY<b id="sWall">0</b></div>
+    <div>REFUSED TODAY<b id="sRef" style="color:var(--red)">0</b></div>
+    <div>FIGHTS OPEN<b id="sFight" style="color:var(--amber)">9</b></div>
+    <div>SPEAKERS<b>3 · one dead</b></div>
+    <div>DAY<b>12</b></div>
+    <div>GATE<b style="color:var(--red)">shut · 61 h</b></div>
+  </div>
+
+  <div class="agent" style="left:10px;top:260px">
+    <div class="nm"><i class="dot" style="background:var(--amber)"></i>PHON</div>
+    <div class="now" id="nPHON">listening</div>
+    <div class="stop">stops <b>never merges<br>two sounds</b><span class="sig">SIGNED</span></div>
+  </div>
+  <div class="agent" style="left:10px;top:350px">
+    <div class="nm"><i class="dot" style="background:#5b7fa0"></i>LEX</div>
+    <div class="now" id="nLEX">counting</div>
+    <div class="stop">stops <b>never guesses<br>from context</b><span class="sig">SIGNED</span></div>
+  </div>
+  <div class="agent" style="left:10px;top:440px">
+    <div class="nm"><i class="dot" style="background:#3f6f57"></i>VOICE</div>
+    <div class="now" id="nVOICE">idle</div>
+    <div class="stop">stops <b>never speaks an<br>unconfirmed word</b><span class="sig">SIGNED</span></div>
+  </div>
+  <div class="agent" style="left:10px;top:530px">
+    <div class="nm"><i class="dot" style="background:var(--mint)"></i>TRACE</div>
+    <div class="now" id="nTRACE">aligning</div>
+    <div class="stop">stops <b>never aligns<br>across speakers</b><span class="sig">SIGNED</span></div>
+  </div>
+  <div class="agent" style="left:10px;top:620px">
+    <div class="nm"><i class="dot" style="background:#8a6fa8"></i>SCRIBE</div>
+    <div class="now" id="nSCRIBE">writing</div>
+    <div class="stop">stops <b>never writes<br>without a source</b><span class="sig">SIGNED</span></div>
+  </div>
+
+  <div id="chain">
+    <div class="chief" style="border-color:#3a403a">
+      <div class="av" style="background:#8fe0b0;color:#2b302a">▣</div>
+      <div class="t" style="color:#a8b0a3"><b style="color:#eceee9">GROK BOT · ON CHAIN</b>the desk has a token<br>fees buy the desk days</div>
+    </div>
+    <div class="rh"><span>token</span><span id="chstat" style="color:#8fe0b0">LIVE</span></div>
+    <div class="kv"><span>status</span><b id="chLive">on chain · today</b></div>
+    <div class="kv"><span>CA</span><b style="font-size:7px">0xfc27ab8c…c580e9f</b></div>
+    <div class="kv"><span>label</span><b style="color:#8fe0b0">CHAIN</b></div>
+
+    <div class="rh" style="margin-top:10px"><span>day 12</span><span style="color:#c8913a">UTC</span></div>
+    <div class="big" id="chVL">00:07:00</div>
+    <div class="bar2 a"><i id="chVLb" style="width:2%"></i></div>
+
+    <div class="rh"><span>desk days bought by fees</span><span id="chDaysS">counting</span></div>
+    <div class="big" id="chDays" style="color:#eceee9">+0</div>
+    <div class="bar2"><i id="chDaysB" style="width:0%"></i></div>
+
+    <div class="rh"><span>where the fees go</span><span>by rule</span></div>
+    <div class="kv"><span>VOICE · her model</span><b>61 h</b></div>
+    <div class="kv"><span>the reels · stereo</span><b>212 h</b></div>
+    <div class="kv"><span>the 1,120 · played back</span><b>1,120</b></div>
+    <div class="kv"><span>the log · public</span><b>every vote</b></div>
+
+    <div class="rh" style="margin-top:10px"><span>desk log · live</span><span id="txn">—</span></div>
+    <div id="tx"></div>
+  </div>
+</div>
+
+<script>
+const cv=document.getElementById('cv'), g=cv.getContext('2d');
+g.scale(2,2);
+const W=1280,H=720;
+function px(x,y,w,h,c){ g.fillStyle=c; g.fillRect(x,y,w,h); }
+const nz=(a,b)=>{const v=Math.sin(a*12.9898+b*78.233)*43758.5453; return v-Math.floor(v);};
+
+/* ── LIVE TERMINAL под токен. Не сюжет, а состояние деска ПРЯМО СЕЙЧАС: лента играет,
+   гейт выносит вердикты потоком (стена / отказ с причиной / спор), стена растёт, VOICE LEFT
+   тикает секундами, справа тёмная панель токена: fees → desk days. Ничего не «происходит»
+   один раз - всё идёт непрерывно, как настоящий монитор. ── */
+
+const SX=180, SY=258, SW=848, SH=448;
+const FPS=30, TPS=20;
+const SAVED0=5367, VL0=94*86400;   // 94 дня ровно; тикают часы внутри дня
+
+const SYL=['sal','lun','ne','tar','va','il','lum','kes','sun','os','sek','val','lo','mir','ta','ren','ko','dil','ush','pa'];
+function word(i){ const n=1+((nz(i,7)*3)|0); let w=''; for(let k=0;k<n;k++) w+=SYL[(nz(i*3+k,11)*SYL.length)|0]; return w; }
+const REASONS=[
+  ['wall','on the wall',      '#57a07a', 0.34],
+  ['no',  'no · no position', '#c04a3c', 0.14],
+  ['no',  'no · heard 4 of 6','#c04a3c', 0.22],
+  ['no',  'no · shifted register · not his voice','#c04a3c', 0.10],
+  ['fight','fight · open · only he can settle it','#c8913a', 0.08],
+  ['her', 'no · her channel · gate shut','#8a6fa8', 0.12],
+];
+function verdictFor(i){ let r=nz(i*1.3,5), acc=0; for(const R of REASONS){ acc+=R[3]; if(r<acc) return R; } return REASONS[0]; }
+const STEP=1.35;                      // вердикт каждые 1.35 с
+function verdicts(sec){ const n=Math.floor(sec/STEP); const out=[]; for(let i=Math.max(0,n-9);i<=n;i++) out.push({i,w:word(i),v:verdictFor(i),pos:(0.2+nz(i,2)*0.7),age:sec-i*STEP}); return out; }
+function counts(sec){ const n=Math.floor(sec/STEP); let wall=0,ref=0,fight=0; for(let i=0;i<=n;i++){ const k=verdictFor(i)[0]; if(k==='wall') wall++; else if(k==='fight') fight++; else ref++; } return {wall,ref,fight}; }
+
+const NOW=[
+ ['PHON',['listening · reel 41','vowel 13 · 96 tapes','pitch 153 hz · his','left channel · muted','narrow · 115 sounds']],
+ ['LEX', ['counting · 5,367','chain 3 of 3 · keep','once · 1,316 · hold','all 212 hours','a fight · 2 forms']],
+ ['VOICE',['idle · a file','her model · 8,204','pitch 2σ · not his','tempo · flat','never unconfirmed']],
+ ['TRACE',['aligning · reel 41','stereo · both channels','0:47 · the laugh','raw reel · cut clean','212 h · loading']],
+ ['SCRIBE',['writing · log 91','counter · 3 speakers','no source · no line','gate · shut · 61 h','tx · to the desk']],
+];
+
+/* ── 1. ГЕЙТ · ПОТОК ВЕРДИКТОВ ── */
+function gatePanel(t,sec){
+  const x=SX+16, y=SY+14, w=548, h=248;
+  px(x,y,w,h,'#f6f7f4'); px(x,y,w,2,'#2b302a');
+  g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#7b8378';
+  g.fillText('THE GATE · LIVE · CHIEF RULES ALONE · NO POSITION ON TAPE, NO WORD', x+12, y+16);
+  const gx=x+300;
+  px(gx, y+26, 3, h-40, '#2b302a');
+  g.font='700 7px "JetBrains Mono", monospace'; g.fillStyle='#22261f'; g.fillText('GATE', gx-12, y+h-6);
+  const vs=verdicts(sec);
+  for(const v of vs){
+    const k=Math.min(1, v.age/STEP);            // 0..1 движение к гейту
+    const yy=y+34+(vs.length-1-vs.indexOf(v))*22;
+    const isNew = vs.indexOf(v)===vs.length-1;
+    const cx = isNew ? x+20+(gx-x-40)*k : gx+16;
+    if(isNew){
+      px(x+12, yy-2, gx-x-20, 18, '#eceee9');
+      px(cx, yy, 70, 14, '#2b302a');
+      g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#eceee9'; g.fillText(v.w, cx+5, yy+10);
+      g.font='7px "JetBrains Mono", monospace'; g.fillStyle='#7b8378'; g.fillText('reel 41 · '+(v.pos*72|0)+':'+String((v.pos*4320|0)%60).padStart(2,'0'), x+16, yy+10);
+    } else {
+      const col=v.v[2];
+      px(gx+8, yy, 6, 14, col);
+      g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#22261f'; g.fillText(v.w, gx+20, yy+10);
+      g.font='7.5px "JetBrains Mono", monospace'; g.fillStyle=col; g.fillText(v.v[1], gx+96, yy+10);
+    }
+  }
+  // курсор-мигалка у гейта
+  if((t|0)%2) px(gx-1, y+26, 5, 6, '#c04a3c');
+}
+
+/* ── 2. СТЕНА · РАСТЁТ ── */
+function wallPanel(t,sec){
+  const x=SX+16, y=SY+276, w=548, h=154;
+  px(x,y,w,h,'#f6f7f4'); px(x,y,w,2,'#57a07a');
+  const c=counts(sec), n=SAVED0+c.wall;
+  g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#7b8378';
+  g.fillText('THE WALL · '+n.toLocaleString('en-US')+' WORDS · +'+c.wall+' SINCE YOU OPENED THIS', x+12, y+16);
+  const cols=132, rows=18, cw=4, ch=6.4, ox=x+12, oy=y+26, base=cols*rows-40;
+  for(let i=0;i<cols*rows;i++){
+    const cc=i%cols, r=(i/cols)|0;
+    let col = i<base ? (nz(i*1.7,2)<0.85 ? '#2b302a' : (nz(i*2.2,3)<0.3?'#8a6fa8':'#57a07a')) : (i<base+c.wall ? '#57a07a' : '#e6e9e2');
+    if(i===base+c.wall && (t|0)%2) col='#c8913a';
+    px(ox+cc*cw, oy+r*ch, cw-1.2, ch-1.4, col);
+  }
+  g.font='7px "JetBrains Mono", monospace'; g.fillStyle='#8a6fa8'; g.fillText('1,777 AGREE WITH HER, NOT HIM', x+12, y+h-6);
+  g.fillStyle='#c04a3c'; g.fillText('REFUSED TODAY · '+c.ref, x+250, y+h-6);
+  g.fillStyle='#c8913a'; g.fillText('FIGHTS OPEN · '+(9+c.fight), x+400, y+h-6);
+}
+
+/* ── 3. ТРИ ГОЛОСА · КТО НА ЛЕНТЕ ── */
+function envTape(u){ if(u<0||u>1) return 0;
+  const a=Math.exp(-Math.pow((u-0.13)/0.09,2)), b=Math.exp(-Math.pow((u-0.42)/0.14,2))*0.86, c=Math.exp(-Math.pow((u-0.78)/0.11,2))*0.58;
+  return Math.min(1,(a+b+c)*(0.92+0.08*nz(u*61,3))); }
+function envHer(u){ if(u<0||u>1) return 0;
+  const a=Math.exp(-Math.pow((u-0.18)/0.07,2))*0.9, b=Math.exp(-Math.pow((u-0.48)/0.08,2)), c=Math.exp(-Math.pow((u-0.74)/0.07,2))*0.7;
+  return Math.min(1,(a+b+c)*(0.9+0.1*nz(u*71,5))); }
+const R_SEG=[[0.02,0.14],[0.30,0.40],[0.52,0.60],[0.80,0.92]], L_SEG=[[0.16,0.27],[0.42,0.50],[0.62,0.70]];
+function envR(u){ for(const [a,b] of R_SEG){ if(u>=a&&u<=b) return envTape((u-a)/(b-a)); } return 0.02+0.02*nz(u*90,4); }
+function envL(u){ for(const [a,b] of L_SEG){ if(u>=a&&u<=b) return envHer((u-a)/(b-a)); } return 0.02+0.02*nz(u*97,6); }
+const cursorU=(sec)=>(sec*0.21)%1;
+
+function speakersPanel(t,sec){
+  const x=SX+580, y=SY+14, w=252, h=248;
+  px(x,y,w,h,'#f6f7f4'); px(x,y,w,2,'#8a6fa8');
+  g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#7b8378';
+  g.fillText('SPEAKERS ON TAPE · 3 · ONE DEAD', x+12, y+16);
+  const cur=cursorU(sec);
+  const rows=[['ELIAS','86 · right channel','#c04a3c',envR(cur)],['VOICE','a file · off','#3f6f57',0.02],['HER','dead 2019 · left · SHUT','#8a6fa8',0]];
+  for(let i=0;i<3;i++){
+    const yy=y+30+i*66;
+    px(x+12, yy, w-24, 56, '#eceee9');
+    g.font='700 9px "JetBrains Mono", monospace'; g.fillStyle=rows[i][2]; g.fillText(rows[i][0], x+18, yy+13);
+    g.font='7px "JetBrains Mono", monospace'; g.fillStyle='#7b8378'; g.fillText(rows[i][1], x+70, yy+13);
+    // vu
+    const lv=rows[i][3];
+    for(let k=0;k<20;k++){ px(x+18+k*11, yy+22, 8, 26, k<lv*20 ? (k>16?'#c04a3c':rows[i][2]) : '#e6e9e2'); }
+    if(i===2){ g.font='700 7px "JetBrains Mono", monospace'; g.fillStyle='#c04a3c'; g.fillText('GATE · 61 HOURS · HE DOES NOT HEAR IT', x+18, yy+52); }
+    if(i===0){ g.font='700 7px "JetBrains Mono", monospace'; g.fillStyle='#22261f'; g.fillText(lv>0.3?'SPEAKING':'—', x+w-70, yy+52); }
+  }
+}
+
+/* ── 4. КУДА ИДУТ КОМИССИИ ── */
+function daysPanel(t,sec){
+  const x=SX+580, y=SY+276, w=252, h=154;
+  px(x,y,w,h,'#f6f7f4'); px(x,y,w,2,'#57a07a');
+  g.font='700 8px "JetBrains Mono", monospace'; g.fillStyle='#7b8378';
+  g.fillText('DESK DAYS BOUGHT BY FEES', x+12, y+16);
+  g.font='700 26px "JetBrains Mono", monospace'; g.fillStyle='#57a07a'; g.fillText('+0', x+12, y+44);
+  g.font='7px "JetBrains Mono", monospace'; g.fillStyle='#a8b0a3'; g.fillText('waiting for the first claim', x+60, y+44);
+  const jobs=[['VOICE · her model · 61 h','#3f6f57'],['TRACE · the reels · 212 h stereo','#57a07a'],['PHON · the 1,120 · played back','#c8913a'],['SCRIBE · the log · public','#8a6fa8']];
+  for(let i=0;i<4;i++){ const yy=y+58+i*22; g.font='7px "JetBrains Mono", monospace'; g.fillStyle='#22261f'; g.fillText(jobs[i][0], x+12, yy+8);
+    px(x+12, yy+11, w-24, 5, '#e6e9e2'); const cx=x+12+((t*2.5+i*50)%(w-24)); px(cx, yy+11, 8, 5, jobs[i][1]); }
+  g.font='700 7px "JetBrains Mono", monospace'; g.fillStyle='#c04a3c'; g.fillText('THE GATE IS NOT FOR SALE · 61 HOURS STAY SHUT', x+12, y+h-6);
+}
+
+/* ── декорации ── */
+function sub(el, w, h, cssH){ return el._c||(el._c=(()=>{const c=document.createElement('canvas'); c.width=w;c.height=h;c.style.width='100%';c.style.height=cssH;el.appendChild(c);return c;})()); }
+function spectro(t,sec){
+  const el=document.getElementById('spec'); if(!el) return;
+  const c=sub(el,480,192,'96px'), x=c.getContext('2d');
+  x.fillStyle='#16190f'; x.fillRect(0,0,480,192);
+  const cur=cursorU(sec);
+  for(let col=0;col<480;col+=3){ const u=col/480, lv=Math.max(0.05, envR(u)*0.8);
+    for(let row=0;row<16;row++){ const v=Math.pow(nz((sec*30+col)|0,row),1.3)*(0.25+lv*1.6)*(1-row/20); if(v<0.09) continue; const a=Math.min(1,v*2.2);
+      x.fillStyle='rgba('+(90+165*a|0)+','+(190+50*a|0)+','+(140+70*a|0)+','+a.toFixed(2)+')'; x.fillRect(col,192-row*12-12,3,12); } }
+  x.strokeStyle='rgba(87,160,122,.9)'; x.lineWidth=2; x.beginPath(); x.moveTo(4+cur*470,0); x.lineTo(4+cur*470,192); x.stroke();
+  x.font='700 11px "JetBrains Mono", monospace'; x.fillStyle='#7aa890'; x.fillText('HIM · RIGHT · LIVE', 8, 18);
+  x.fillStyle='#8a6fa8'; x.fillText('LEFT · SHUT', 380, 18);
+  const q=document.getElementById('specq'); const vs=verdicts(sec); if(q) q.textContent='"'+vs[vs.length-1].w+'"  ·  reel 41';
+}
+function utc(sec){ if(!window.__manual){ const d=new Date(); return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+':'+String(d.getUTCSeconds()).padStart(2,'0'); } const t=7*60+sec; return '00:'+String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t)%60).padStart(2,'0'); }
+function vlPanel(t,sec){
+  const el=document.getElementById('vl'); if(!el) return;
+  const c=sub(el,432,224,'112px'), x=c.getContext('2d');
+  x.fillStyle='#f7f6f1'; x.fillRect(0,0,432,224);
+  x.font='700 44px "JetBrains Mono", monospace'; x.fillStyle='#22261f'; x.fillText('DAY 12', 16, 70);
+  x.font='700 26px "JetBrains Mono", monospace'; x.fillStyle='#57a07a'; x.fillText(utc(sec)+' UTC', 210, 66);
+  x.font='12px "JetBrains Mono", monospace'; x.fillStyle='#7b8378'; x.fillText('the desk went on chain today', 16, 100);
+  x.fillStyle='#e6e9e2'; x.fillRect(16, 120, 400, 14); x.fillStyle='#8fe0b0'; x.fillRect(16, 120, 400*((7*60+sec)/86400)*40, 14);
+  x.font='700 11px "JetBrains Mono", monospace'; x.fillStyle='#57a07a'; x.fillText('FEES BUY THE DESK DAYS · +0 SO FAR', 16, 160);
+  x.font='11px "JetBrains Mono", monospace'; x.fillStyle='#a8b0a3'; x.fillText('every claim moves the green line right', 16, 182);
+  for(let i=0;i<30;i++){ x.fillStyle=(i+(t|0))%7===0?'#57a07a':'#e6e9e2'; x.fillRect(16+i*13.6, 200, 9, 6); }
+}
+function reel(t,sec){
+  const el=document.getElementById('reel'); if(!el) return;
+  const c=sub(el,300,224,'112px'), x=c.getContext('2d');
+  x.fillStyle='#f7f6f1'; x.fillRect(0,0,300,224);
+  const cx=104, cy=100, R=72, a=t*0.14;
+  x.strokeStyle='#dfe3dc'; x.lineWidth=2; for(let rr=R; rr>14; rr-=7){ x.beginPath(); x.arc(cx,cy,rr,0,6.283); x.stroke(); }
+  x.strokeStyle='#c9cec6'; x.lineWidth=4; for(let i=0;i<3;i++){ const ang=a+i*2.094; x.beginPath(); x.moveTo(cx,cy); x.lineTo(cx+Math.cos(ang)*R, cy+Math.sin(ang)*R); x.stroke(); }
+  x.fillStyle='#8d7b5f'; x.fillRect(cx-6,cy-6,12,12);
+  x.fillStyle='#22261f'; x.font='700 10px "JetBrains Mono", monospace'; x.fillText('LIVE', 196, 96);
+  x.font='9px "JetBrains Mono", monospace'; x.fillStyle='#7b8378'; x.fillText('41/212', 196, 114);
+  x.fillStyle='#57a07a'; x.fillRect(196, 130, 90, 5); x.fillStyle='#c04a3c'; x.fillRect(196, 140, 90, 5);
+  x.font='8px "JetBrains Mono", monospace'; x.fillStyle='#a8b0a3'; x.fillText('R', 288, 135); x.fillText('L', 288, 145);
+  x.fillStyle='#c9cec6'; for(let i=0;i<6;i++) x.fillRect(196, 158+i*9, 4+nz(i,t*0.02)*88, 5);
+}
+function panels(t,sec){
+  const set=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
+  set('clk',utc(sec)+' UTC');
+  const c=counts(sec), n=SAVED0+c.wall;
+  set('tsaved', n.toLocaleString('en-US')); set('sSaved', n.toLocaleString('en-US')); set('sSavedD','+'+c.wall);
+  set('sWall', String(c.wall)); set('sRef', String(c.ref)); set('sFight', String(9+c.fight));
+  set('chVL', utc(sec));
+  const pl=document.getElementById('plive'); if(pl) pl.style.opacity = (t|0)%2 ? '1' : '.55';
+  set('kvReel', 'reel 41 · '+(cursorU(sec)*72|0)+':'+String((cursorU(sec)*4320|0)%60).padStart(2,'0'));
+  for(const [nm,lines] of NOW){ const e=document.getElementById('n'+nm); if(e){ const L=lines[Math.floor(sec/2.3+nz(nm.length,1)*5)%lines.length]; e.innerHTML='<i>▸</i> '+L; } }
+  const tx=document.getElementById('tx');
+  if(tx){ const vs=verdicts(sec).slice().reverse().slice(0,9);
+    tx.innerHTML = vs.map(v=>'<div class="'+(v.v[0]==='wall'?'':'f')+'"><b>'+clkAt(v.i*STEP)+'</b> '+v.w+' · '+v.v[1]+'</div>').join(''); }
+  set('txn', String(Math.floor(sec/STEP)+91));
+}
+function clkAt(s){ return utc(s); }
+function ticker(t,sec){
+  const y=SY+2, h=9; px(SX, y, SW, h, '#2b302a');
+  for(let i=0;i<40;i++){ const x=SX+((i*26+t*4.2)%SW); px(x, y+2, 12, h-4, i%5===0 ? '#8fe0b0' : '#8d7b5f'); }
+  g.font='700 6.5px "JetBrains Mono", monospace'; g.fillStyle='#eceee9';
+  const pos=(212*3600*0.223 + 44*60 + sec*37)|0;
+  g.fillText('REEL 41 · '+String(pos).padStart(6,'0')+'  ·  LIVE  ·  ON CHAIN', SX+SW-170, y+7);
+}
+function scan(t,sec){ const bw=34, x=SX+((t*9.5)%(SW+bw))-bw; px(x, SY+12, bw, SH-12, 'rgba(43,48,42,.07)'); px(x+bw-2, SY+12, 2, SH-12, 'rgba(43,48,42,.28)'); }
+
+let T=0;
+function draw(){
+  const sec=T/FPS, t=T*TPS/FPS;
+  g.setTransform(2,0,0,2,0,0); g.clearRect(0,0,W,H);
+  px(SX,SY,SW,SH,'#eceee9'); px(SX,SY,SW,1,'#c9cec6');
+  gatePanel(t,sec); wallPanel(t,sec); speakersPanel(t,sec); daysPanel(t,sec);
+  ticker(t,sec); scan(t,sec); spectro(t,sec); vlPanel(t,sec); reel(t,sec); panels(t,sec);
+}
+window.__tick=()=>{ T++; draw(); };
+window.__manual=location.search.indexOf('manual')>=0;
+if(window.__manual){ draw(); } else (function loop(){ T++; draw(); requestAnimationFrame(loop); })();
+</script>

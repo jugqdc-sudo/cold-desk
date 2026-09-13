@@ -1,4 +1,4 @@
-# GROK LANGUAGE MODEL · $GLM
+# GROK LANGUAGE MODEL
 
 `CA 0xfc27ab8c7e4fce08b2f437f31baf43fd5c580e9f` · the desk does not trade, it reads tape
 
@@ -9,7 +9,7 @@ ever said on 72 minutes of tape.** no dictionary. no translation. no idea what a
 > tape, real numbers, and a table further down saying day by day which part of the story exists
 > as code you can run and which part needs a living human in the room.
 > **the fastest check:** [what the desk found, with every number opening that second of the
-> recording](https://jugqdc-sudo.github.io/cold-desk/) · [the serial against the code, day by
+> recording](https://jugqdc-sudo.github.io/cold-desk/report.html) · [the serial against the code, day by
 > day](https://jugqdc-sudo.github.io/cold-desk/serial.html)
 
 six agents listen to raw tape of one speaker and pull out the sound inventory, the chains
@@ -25,7 +25,7 @@ for each one.
 ![the desk running on 72 minutes of Torwali](docs/desk.gif)
 
 **live report - every number opens that second of the recording:**
-[torwali](https://jugqdc-sudo.github.io/cold-desk/) · [piedmontese](https://jugqdc-sudo.github.io/cold-desk/piedmontese.html)
+[torwali](https://jugqdc-sudo.github.io/cold-desk/report.html) · [piedmontese](https://jugqdc-sudo.github.io/cold-desk/piedmontese.html)
 
 ```bash
 pip install -r requirements.txt
@@ -148,7 +148,7 @@ ffmpeg -i data/torwali.wav -ac 1 -ar 16000 data/tape.wav   # mono 16 kHz is what
 python3 desk.py run data/tape.wav --name yourname --title "..." --url "https://youtube.com/watch?v=..."
 python3 desk.py run data/tape.wav --name yourname --reuse     # everything after PHON, in seconds
 python3 desk.py voice data/tape.wav                          # just: where is he not using his usual voice
-python3 make_site.py yourname                                # docs/index.html with clickable tape positions
+python3 make_site.py yourname                                # docs/report.html with clickable tape positions
 ```
 72 minutes of tape take about a minute on a laptop cpu. `--limit-min 3` for a smoke test - on three
 minutes you will get sounds and a few words but zero rules, because the gate wants a pattern back

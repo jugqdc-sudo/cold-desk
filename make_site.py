@@ -7,7 +7,7 @@ import json, pathlib, re, sys, html
 name = sys.argv[1] if len(sys.argv) > 1 else "torwali"
 # a page is named after its run by default; index.html stays with torwali.
 # without this, `make_site.py piedmontese` silently overwrites another tape's page
-page_name = sys.argv[2] if len(sys.argv) > 2 else ("index" if sys.argv[1] == "torwali" else sys.argv[1])
+page_name = sys.argv[2] if len(sys.argv) > 2 else ("report" if sys.argv[1] == "torwali" else sys.argv[1])
 root = pathlib.Path(__file__).parent
 run = json.loads((root / "runs" / name / "run.json").read_text())
 log = (root / "runs" / name / "log.txt").read_text().splitlines()
@@ -105,8 +105,8 @@ b = dv.get("baseline") or {}
 # адрес контракта показывается, только если он задан: COLD_DESK_CA=... python3 make_site.py
 # пустая переменная = блока на странице нет, чтобы не висела заглушка
 ca = (__import__("os").environ.get("COLD_DESK_CA") or "").strip()
-ca_top = (f'<span class="cs" style="margin-left:12px">$GLM · CA <code style="font-size:11px;user-select:all">{e(ca)}</code></span>') if ca else ""
-ca_block = (f'<div class="ca"><span class="lbl">$GLM · CONTRACT</span><code>{e(ca)}</code>'
+ca_top = (f'<span class="cs" style="margin-left:12px">CA <code style="font-size:11px;user-select:all">{e(ca)}</code></span>') if ca else ""
+ca_block = (f'<div class="ca"><span class="lbl">CONTRACT</span><code>{e(ca)}</code>'
             f'<span class="lbl" style="margin-left:auto">THE DESK DOES NOT TRADE · IT READS TAPE</span></div>'
             ) if ca else ""
 
@@ -432,6 +432,7 @@ ul{{padding-left:18px}} li{{margin:3px 0}}
   <span class="cs"><span class="rec"></span> CASE 01 · THE LAST SPEAKER</span>
   {ca_top}
   <span class="sp">
+    <a href="index.html">HOME</a>
     <a href="#check">HOW TO CHECK</a>
     <a href="#rules">RULES</a>
     <a href="#fights">FIGHTS</a>

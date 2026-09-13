@@ -32,11 +32,11 @@ code{background:#eceae2;padding:1px 5px;font-size:12px}
 @media(max-width:760px){.day{grid-template-columns:1fr;gap:8px}.dbadge{text-align:left;padding-top:0}h1{font-size:32px}}
 </style></head><body><div class="wrap">
 
-<div class="top"><b>GROK LANGUAGE MODEL</b>
+<div class="top"><b><a href="index.html" style="color:inherit;text-decoration:none">GROK LANGUAGE MODEL</a></b>
 <span class="pill">CASE 01 · THE LAST SPEAKER</span>
 <span class="pill mint">5 DAYS RUN ON REAL TAPE</span>
 <span class="pill red">2 NEED A LIVING SPEAKER</span>
-<span style="margin-left:auto"><a href="index.html">torwali</a> · <a href="piedmontese.html">piedmontese</a></span></div>
+<span style="margin-left:auto"><a href="report.html">torwali</a> · <a href="piedmontese.html">piedmontese</a></span></div>
 
 <h1>the serial against the code</h1>
 <div class="sub">the speaker in the story is invented. the tape is not, the numbers are not, and this
@@ -64,17 +64,17 @@ three of the days need a human being in a room, and no amount of code closes tha
 <div class="day mint">
 <div class="dnum">DAY 1</div>
 <div class="dstory">six agents pull sounds, words and rules off raw tape</div>
-<div class="dcode"><code>desk.py run</code> on 72 minutes: <b>1,164</b> utterances cut, <b>33,877</b> phones heard, <b>3,218</b> word candidates, <b>60</b> rules written and <b>19</b> signed <a class="pos" href="index.html">see it</a></div>
+<div class="dcode"><code>desk.py run</code> on 72 minutes: <b>1,164</b> utterances cut, <b>33,877</b> phones heard, <b>3,218</b> word candidates, <b>60</b> rules written and <b>19</b> signed <a class="pos" href="report.html">see it</a></div>
 <div class="dbadge mint">RAN ON REAL TAPE</div>
 </div><div class="day mint">
 <div class="dnum">DAY 2</div>
 <div class="dstory">contradictions are kept as variants instead of being resolved</div>
-<div class="dcode"><b>9</b> fights stay open in the run - pairs one phone apart where both forms keep coming back. Nothing picks a winner, because nobody alive can <a class="pos" href="index.html#fights">see it</a></div>
+<div class="dcode"><b>9</b> fights stay open in the run - pairs one phone apart where both forms keep coming back. Nothing picks a winner, because nobody alive can <a class="pos" href="report.html#fights">see it</a></div>
 <div class="dbadge mint">RAN ON REAL TAPE</div>
 </div><div class="day mint">
 <div class="dnum">DAY 3</div>
 <div class="dstory">rules turn out to be him doing somebody else's voice</div>
-<div class="dcode">every rule carries <code>in_shifted_voice</code>. On this tape <b>6 of the 19 signed rules</b> live where his pitch or tempo is 2σ off his own median, and <b>60</b> register shifts are logged with positions <a class="pos" href="index.html#voice">see it</a></div>
+<div class="dcode">every rule carries <code>in_shifted_voice</code>. On this tape <b>6 of the 19 signed rules</b> live where his pitch or tempo is 2σ off his own median, and <b>60</b> register shifts are logged with positions <a class="pos" href="report.html#voice">see it</a></div>
 <div class="dbadge mint">RAN ON REAL TAPE</div>
 </div><div class="day red">
 <div class="dnum">DAY 4</div>
@@ -94,17 +94,17 @@ three of the days need a human being in a room, and no amount of code closes tha
 </div><div class="day mint">
 <div class="dnum">DAY 7</div>
 <div class="dstory">the bot says a word that is on no tape anywhere, and it is real</div>
-<div class="dcode"><code>agents/derive.py</code> runs the signed rules backwards. <b>1,110</b> forms this grammar allows · <b>5</b> turned out to be on the tape after all · <b>1,105</b> are on no second of it. Control: <b>0 of 1,110</b> random chains of the same lengths land anywhere <a class="pos" href="index.html#derived">see it</a></div>
+<div class="dcode"><code>agents/derive.py</code> runs the signed rules backwards. <b>1,110</b> forms this grammar allows · <b>5</b> turned out to be on the tape after all · <b>1,105</b> are on no second of it. Control: <b>0 of 1,110</b> random chains of the same lengths land anywhere <a class="pos" href="report.html#derived">see it</a></div>
 <div class="dbadge mint">RAN ON REAL TAPE</div>
 </div><div class="day mint">
 <div class="dnum">DAY 8</div>
 <div class="dstory">the queue is sorted by which words are safe to lose</div>
-<div class="dcode"><code>derive.queue()</code> - <b>2,041 of 3,218</b> word candidates were heard twice or less and no signed rule rebuilds them. That is the order to work through with a speaker, not the frequency list <a class="pos" href="index.html#queue">see it</a></div>
+<div class="dcode"><code>derive.queue()</code> - <b>2,041 of 3,218</b> word candidates were heard twice or less and no signed rule rebuilds them. That is the order to work through with a speaker, not the frequency list <a class="pos" href="report.html#queue">see it</a></div>
 <div class="dbadge mint">RAN ON REAL TAPE</div>
 </div><div class="day amber">
 <div class="dnum">DAY 8</div>
 <div class="dstory">his voice has fewer minutes left than the queue has words</div>
-<div class="dcode">fade is measured in 10-minute windows inside each tape <a class="pos" href="index.html#fade">see it</a></div>
+<div class="dcode">fade is measured in 10-minute windows inside each tape <a class="pos" href="report.html#fade">see it</a></div>
 <div class="dbadge amber">HALF OF IT RUNS</div>
 </div>
 
