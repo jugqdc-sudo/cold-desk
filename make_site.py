@@ -105,7 +105,8 @@ b = dv.get("baseline") or {}
 # адрес контракта показывается, только если он задан: COLD_DESK_CA=... python3 make_site.py
 # пустая переменная = блока на странице нет, чтобы не висела заглушка
 ca = (__import__("os").environ.get("COLD_DESK_CA") or "").strip()
-ca_block = (f'<div class="ca"><span class="lbl">CONTRACT</span><code>{e(ca)}</code>'
+ca_top = (f'<span class="cs" style="margin-left:12px">$GLM · CA <code style="font-size:11px;user-select:all">{e(ca)}</code></span>') if ca else ""
+ca_block = (f'<div class="ca"><span class="lbl">$GLM · CONTRACT</span><code>{e(ca)}</code>'
             f'<span class="lbl" style="margin-left:auto">THE DESK DOES NOT TRADE · IT READS TAPE</span></div>'
             ) if ca else ""
 
@@ -354,7 +355,7 @@ page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>THE LAST SPEAKER · {e(name)} · case report</title>
 <link rel="icon" href="logo.svg">
-<meta property="og:title" content="THE LAST SPEAKER · COLD.DESK">
+<meta property="og:title" content="THE LAST SPEAKER · GROK LANGUAGE MODEL">
 <meta property="og:description" content="six agents, {s['tape_hours']} hours of a language with no alphabet, {s['words_saved']:,} words and {s['rules_signed']} rules - every one of them opens the second of tape it came from">
 <meta property="og:image" content="https://jugqdc-sudo.github.io/cold-desk/desk.gif">
 <meta name="twitter:card" content="summary_large_image">
@@ -427,8 +428,9 @@ ul{{padding-left:18px}} li{{margin:3px 0}}
 
 <div class="bar">
   <img src="logo.svg" alt="">
-  <span class="nm">COLD.DESK</span>
+  <span class="nm">GROK LANGUAGE MODEL</span>
   <span class="cs"><span class="rec"></span> CASE 01 · THE LAST SPEAKER</span>
+  {ca_top}
   <span class="sp">
     <a href="#check">HOW TO CHECK</a>
     <a href="#rules">RULES</a>

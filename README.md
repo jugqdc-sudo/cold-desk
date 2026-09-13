@@ -1,4 +1,6 @@
-# COLD.DESK
+# GROK LANGUAGE MODEL · $GLM
+
+`CA 0xfc27ab8c7e4fce08b2f437f31baf43fd5c580e9f` · the desk does not trade, it reads tape
 
 **3,218 word candidates, 19 grammar rules, and 1,105 forms this language allows that nobody
 ever said on 72 minutes of tape.** no dictionary. no translation. no idea what any of it means.
